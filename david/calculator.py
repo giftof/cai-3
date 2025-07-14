@@ -58,8 +58,7 @@ def parse(user_input: str):
         to_operater(filtered[1])
         record['num2'] = to_int(filtered[2])
     else:
-        raise('Invalid expression: [1 number] OR [number operator number]')
-
+        raise ValueError('Invalid expression: [1 number] OR [number operator number]')
 
 class UserRecord(TypedDict):
     num1: Optional[int]
