@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, TypedDict, Optional
 import math
 
 def add(a: int, b: int) -> float:
@@ -15,7 +15,6 @@ def divide(a: int, b: int) -> float:
         raise ValueError('Error: Division by zero.')
     return float(a / b)
 
-# def to_float(user_input: str, none_zero: bool = False) -> float:
 def to_int(user_input: str) -> int:
     val = user_input.strip().lower()
 
@@ -32,7 +31,7 @@ def to_int(user_input: str) -> int:
     except:
         raise ValueError('Invalid number input.')
 
-def to_operater(user_input: str) -> Callable[[float, float], float]:
+def to_operater(user_input: str) -> None:
     val = user_input.strip().lower()
 
     constants = {
@@ -43,16 +42,43 @@ def to_operater(user_input: str) -> Callable[[float, float], float]:
     }
 
     try:
-        return constants[val]
+        record['operator'] = constants[val]
     except:
         raise ValueError('Invalid operator.')
 
+def parse(user_input: str):
+    val = user_input.strip().lower()
+    array = val.split(' ')
+    filtered = [i for i in array if i.strip()]
+
+    if len(filtered) == 1:
+        record['num1'] = to_int(filtered[0])
+    elif len(filtered) == 3:
+        record['num1'] = to_int(filtered[0])
+        to_operater(filtered[1])
+        record['num2'] = to_int(filtered[2])
+    else:
+        raise('Invalid expression: [1 number] OR [number operator number]')
+
+
+class UserRecord(TypedDict):
+    num1: Optional[int]
+    num2: Optional[int]
+    operator: Optional[Callable[[int, int], float]]
+
+record: UserRecord = {
+    'num1': None,
+    'num2': None,
+    'operator': None
+}
+
 def main():
     try:
-        a = to_int(input('Enter expression: '))
-        b = to_int(input('Enter Second Number: '))
-        o = to_operater(input('Enter Operator (Allowed Type: +-*/): '))
-        print(f'Result: <{o(a, b)}>')
+        parse(input('Enter expression: '))
+        if (record['num2'] == None):
+            record['num2'] = to_int(input('Enter Second Number: '))
+            to_operater(input('Enter Operator (Allowed Type: +-*/): '))
+        print(f"Result: <{record['operator'](record['num1'], record['num2'])}>")
     except ValueError as error:
         print(error)
 
