@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Flask App (port 80)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/david/app.py",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    }
+  ]
+}
+
